@@ -27,9 +27,15 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.android.support:support-v13:23.1.0'
     compile 'com.android.support:recyclerview-v7:23.1.0'
+
+     // Material design
+    compile 'com.android.support:design:23.1.0'
+
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.jakewharton.timber:timber:4.1.0'
 
     // Divider for recyclerview
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.8'
+
+
 }

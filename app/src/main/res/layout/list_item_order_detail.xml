@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/padding_small"
-        android:layout_marginRight="@dimen/padding_small"
+        android:layout_marginRight="@dimen/padding_medium"
         tools:src="@drawable/ic_dhl"
         />
 
