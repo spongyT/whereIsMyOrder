@@ -7,9 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -76,6 +78,16 @@ public class OrderListFragment extends Fragment{
 
         loadOrdersAndSetToAdapter();
 
+        etTrackingId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    addOrder();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         return root;
     }
 
@@ -92,7 +104,7 @@ public class OrderListFragment extends Fragment{
     private void loadOrdersAndSetToAdapter(){
         LazyList old = orders;
 
-        orders = orderDao.queryBuilder().build().listLazy();
+        orders = orderDao.queryBuilder().orderDesc(OrderDao.Properties.CreatedTimeStamp).build().listLazy();
         adapter.setOrders(orders);
 
         if(old != null)
@@ -111,17 +123,29 @@ public class OrderListFragment extends Fragment{
 
     @OnClick(R.id.bt_add)
     public void onBtAddClick(){
+        addOrder();
+    }
+
+    private void addOrder(){
+        // validate input
         String inputText = etTrackingId.getText().toString();
         if(inputText.isEmpty()){
             Toast.makeText(getContext(), getString(R.string.please_insert_tracking_id), Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // close keyboard
+        InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(etTrackingId.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+
+        // create order
         Order order = new Order();
         order.setOrderNumber(inputText);
         order.setCreatedTimeStamp(System.currentTimeMillis());
         orderDao.insert(order);
         eventBus.post(new InsertOrderEvent());
+
+        // trigger sync process
         getActivity().startService(new Intent(getContext(), OrderSyncService.class));
     }
 
