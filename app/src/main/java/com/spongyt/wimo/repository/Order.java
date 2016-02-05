@@ -9,7 +9,11 @@ public class Order {
     private Long id;
     /** Not-null value. */
     private String orderNumber;
+    private String name;
     private String shipper;
+    private String deliveryState;
+    private String deliveryStateText;
+    private Boolean isSentByUser;
     private Boolean isSynced;
     private Long createdTimeStamp;
 
@@ -20,10 +24,14 @@ public class Order {
         this.id = id;
     }
 
-    public Order(Long id, String orderNumber, String shipper, Boolean isSynced, Long createdTimeStamp) {
+    public Order(Long id, String orderNumber, String name, String shipper, String deliveryState, String deliveryStateText, Boolean isSentByUser, Boolean isSynced, Long createdTimeStamp) {
         this.id = id;
         this.orderNumber = orderNumber;
+        this.name = name;
         this.shipper = shipper;
+        this.deliveryState = deliveryState;
+        this.deliveryStateText = deliveryStateText;
+        this.isSentByUser = isSentByUser;
         this.isSynced = isSynced;
         this.createdTimeStamp = createdTimeStamp;
     }
@@ -46,12 +54,44 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getShipper() {
         return shipper;
     }
 
     public void setShipper(String shipper) {
         this.shipper = shipper;
+    }
+
+    public String getDeliveryState() {
+        return deliveryState;
+    }
+
+    public void setDeliveryState(String deliveryState) {
+        this.deliveryState = deliveryState;
+    }
+
+    public String getDeliveryStateText() {
+        return deliveryStateText;
+    }
+
+    public void setDeliveryStateText(String deliveryStateText) {
+        this.deliveryStateText = deliveryStateText;
+    }
+
+    public Boolean getIsSentByUser() {
+        return isSentByUser;
+    }
+
+    public void setIsSentByUser(Boolean isSentByUser) {
+        this.isSentByUser = isSentByUser;
     }
 
     public Boolean getIsSynced() {

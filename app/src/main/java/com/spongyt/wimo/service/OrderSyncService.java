@@ -73,6 +73,9 @@ public class OrderSyncService extends IntentService{
         syncOrders();
     }
 
+    /**
+     * Synchronizes all orders of the current database
+     */
     private void syncOrders(){
         Timber.d("Sync all orders..");
         List<Order> unsyncedOrders = orderDao.queryBuilder().where(OrderDao.Properties.IsSynced.isNull()).list();
@@ -110,7 +113,7 @@ public class OrderSyncService extends IntentService{
                 public void onResponse(Response<OrderRequestResponse> response) {
                     if(response.isSuccess()){
                         Order loadedOrder = orderDao.load(orderToSync);
-                        loadedOrder.setShipper(response.body().getShipperName());
+                        loadedOrder = syncOrderWithResponse(loadedOrder, response.body());
                         loadedOrder.setIsSynced(true);
                         orderDao.update(loadedOrder);
                         eventBus.post(new UpdateOrderEvent());
@@ -125,6 +128,20 @@ public class OrderSyncService extends IntentService{
                     eventBus.post(new UpdateOrderEvent());
                 }
             });
+        }
+
+        /**
+         * Sync a order with the reponse received from backend
+         * @param order the order retrieved from local database
+         * @param orderResponse the response received from backend
+         * @return the synced order
+         */
+        private Order syncOrderWithResponse(Order order, OrderRequestResponse orderResponse){
+            order.setShipper(orderResponse.getShipperName());
+            order.setDeliveryState(orderResponse.getDeliveryState().name());
+            order.setDeliveryStateText(orderResponse.getDeliveryStateText());
+            order.setIsSentByUser(orderResponse.isSentByUser());
+            return order;
         }
     }
 

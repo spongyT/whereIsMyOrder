@@ -4,5 +4,7 @@
     <string name="et_tracking_id_hint">Insert tracking id..</string>
     <string name="please_insert_tracking_id">Please insert a tracking id!</string>
     <string name="status">Status: %s</string>
+    <string name="incoming">Incoming</string>
+    <string name="outgoing">Outgoing</string>
 
 </resources>

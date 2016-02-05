@@ -12,7 +12,11 @@ public class MyClass {
         Entity order = schema.addEntity("Order");
         order.addIdProperty();
         order.addStringProperty("orderNumber").notNull();
+        order.addStringProperty("name");
         order.addStringProperty("shipper");
+        order.addStringProperty("deliveryState");
+        order.addStringProperty("deliveryStateText");
+        order.addBooleanProperty("isSentByUser");
         order.addBooleanProperty("isSynced");
         order.addLongProperty("createdTimeStamp");
         order.addContentProvider();

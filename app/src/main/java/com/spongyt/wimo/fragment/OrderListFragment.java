@@ -128,7 +128,7 @@ public class OrderListFragment extends Fragment{
 
     private void addOrder(){
         // validate input
-        String inputText = etTrackingId.getText().toString();
+        String inputText = etTrackingId.getText().toString().trim();
         if(inputText.isEmpty()){
             Toast.makeText(getContext(), getString(R.string.please_insert_tracking_id), Toast.LENGTH_SHORT).show();
             return;
@@ -184,9 +184,9 @@ public class OrderListFragment extends Fragment{
             }else{
                 ViewHolderDetails holderDetails = (ViewHolderDetails) holder;
                 holderDetails.tvCaption.setText(order.getOrderNumber());
-                holderDetails.tvStatus.setText(context.getString(R.string.status, "On the way"));
-                holderDetails.ivLogo.setImageResource(R.drawable.ic_dhl);
-                holderDetails.tvInboundOutbound.setText("Incoming");
+                holderDetails.tvStatus.setText(context.getString(R.string.status, order.getDeliveryStateText()));
+                holderDetails.ivLogo.setImageResource(order.getShipper().equals("DHL") ? R.drawable.ic_dhl : R.drawable.ic_hermes);
+                holderDetails.tvInboundOutbound.setText(order.getIsSentByUser() ? context.getString(R.string.outgoing) : context.getString(R.string.incoming));
             }
 
         }
