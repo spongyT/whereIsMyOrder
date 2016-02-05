@@ -2,6 +2,8 @@
 <manifest package="com.spongyt.wimo"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".WimoApplication"
         android:allowBackup="true"
@@ -9,6 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activity.OrderListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,7 +22,12 @@
 
         <provider
             android:name="com.spongyt.wimo.repository.OrderContentProvider"
-            android:authorities="com.spongyt.wimo.repository.provider"/>
+            android:authorities="com.spongyt.wimo.repository.provider"
+            android:exported="false"/>
+
+        <service
+            android:name=".service.OrderSyncService"
+            android:exported="false" />
 
     </application>
 

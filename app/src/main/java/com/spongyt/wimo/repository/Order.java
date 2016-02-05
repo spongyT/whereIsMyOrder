@@ -10,6 +10,8 @@ public class Order {
     /** Not-null value. */
     private String orderNumber;
     private String shipper;
+    private Boolean isSynced;
+    private Long createdTimeStamp;
 
     public Order() {
     }
@@ -18,10 +20,12 @@ public class Order {
         this.id = id;
     }
 
-    public Order(Long id, String orderNumber, String shipper) {
+    public Order(Long id, String orderNumber, String shipper, Boolean isSynced, Long createdTimeStamp) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.shipper = shipper;
+        this.isSynced = isSynced;
+        this.createdTimeStamp = createdTimeStamp;
     }
 
     public Long getId() {
@@ -48,6 +52,22 @@ public class Order {
 
     public void setShipper(String shipper) {
         this.shipper = shipper;
+    }
+
+    public Boolean getIsSynced() {
+        return isSynced;
+    }
+
+    public void setIsSynced(Boolean isSynced) {
+        this.isSynced = isSynced;
+    }
+
+    public Long getCreatedTimeStamp() {
+        return createdTimeStamp;
+    }
+
+    public void setCreatedTimeStamp(Long createdTimeStamp) {
+        this.createdTimeStamp = createdTimeStamp;
     }
 
 }

@@ -13,8 +13,10 @@ public class MyClass {
         order.addIdProperty();
         order.addStringProperty("orderNumber").notNull();
         order.addStringProperty("shipper");
+        order.addBooleanProperty("isSynced");
+        order.addLongProperty("createdTimeStamp");
         order.addContentProvider();
 
-        new DaoGenerator().generateAll(schema, ".");
+        new DaoGenerator().generateAll(schema, "app\\src\\main\\java");
     }
 }

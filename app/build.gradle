@@ -37,5 +37,12 @@ dependencies {
     // Divider for recyclerview
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.8'
 
+    // Netowrking
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+
+
 
 }

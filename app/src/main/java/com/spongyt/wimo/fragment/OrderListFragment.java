@@ -1,7 +1,7 @@
 package com.spongyt.wimo.fragment;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,11 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spongyt.wimo.R;
-import com.spongyt.wimo.repository.DaoMaster;
-import com.spongyt.wimo.repository.DaoSession;
+import com.spongyt.wimo.repository.DaoProvider;
 import com.spongyt.wimo.repository.Order;
 import com.spongyt.wimo.repository.OrderDao;
 import com.spongyt.wimo.repository.event.InsertOrderEvent;
+import com.spongyt.wimo.repository.event.UpdateOrderEvent;
+import com.spongyt.wimo.service.OrderSyncService;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import butterknife.Bind;
@@ -29,7 +30,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.event.EventBus;
-import timber.log.Timber;
 
 
 public class OrderListFragment extends Fragment{
@@ -60,11 +60,7 @@ public class OrderListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getContext(), "swtasks-db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        DaoSession daoSession = daoMaster.newSession();
-        orderDao = daoSession.getOrderDao();
+        orderDao = DaoProvider.getOrderDao();
 
         View root = inflater.inflate(R.layout.fragment_order_list, container, false);
 
@@ -105,6 +101,10 @@ public class OrderListFragment extends Fragment{
         loadOrdersAndSetToAdapter();
     }
 
+    public void onEvent(UpdateOrderEvent event){
+        loadOrdersAndSetToAdapter();
+    }
+
     @OnClick(R.id.bt_add)
     public void onBtAddClick(){
         String inputText = etTrackingId.getText().toString();
@@ -115,9 +115,10 @@ public class OrderListFragment extends Fragment{
 
         Order order = new Order();
         order.setOrderNumber(inputText);
-        order.setShipper("DHL");
+        order.setCreatedTimeStamp(System.currentTimeMillis());
         orderDao.insert(order);
         eventBus.post(new InsertOrderEvent());
+        getActivity().startService(new Intent(getContext(), OrderSyncService.class));
     }
 
     public final static class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -165,7 +166,6 @@ public class OrderListFragment extends Fragment{
         @Override
         public int getItemCount() {
             int count = orders == null ? 0 : orders.size();
-            Timber.i("Count %d", count);
             return count;
         }
 
