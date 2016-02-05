@@ -30,6 +30,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 
 
 public class OrderListFragment extends Fragment{
@@ -97,10 +99,12 @@ public class OrderListFragment extends Fragment{
             old.close();
     }
 
+    @Subscribe(threadMode = ThreadMode.MainThread)
     public void onEvent(InsertOrderEvent event){
         loadOrdersAndSetToAdapter();
     }
 
+    @Subscribe(threadMode = ThreadMode.MainThread)
     public void onEvent(UpdateOrderEvent event){
         loadOrdersAndSetToAdapter();
     }

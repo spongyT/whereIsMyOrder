@@ -109,7 +109,7 @@ public class OrderSyncService extends IntentService{
                 @Override
                 public void onResponse(Response<OrderRequestResponse> response) {
                     if(response.isSuccess()){
-                        Order loadedOrder = orderDao.queryBuilder().where(OrderDao.Properties.Id.eq(orderToSync)).unique();
+                        Order loadedOrder = orderDao.load(orderToSync);
                         loadedOrder.setShipper(response.body().getShipperName());
                         loadedOrder.setIsSynced(true);
                         orderDao.update(loadedOrder);
@@ -122,6 +122,7 @@ public class OrderSyncService extends IntentService{
                 @Override
                 public void onFailure(Throwable t) {
                     Timber.w(t, "Create order failed");
+                    eventBus.post(new UpdateOrderEvent());
                 }
             });
         }
