@@ -1,6 +1,4 @@
-package com.spongyt.wimo.networking;
-
-import com.spongyt.wimo.networking.model.OrderRequestResponse;
+package com.spongyt.wimo.networking.order;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

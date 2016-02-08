@@ -3,9 +3,9 @@ package com.spongyt.wimo.service;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.spongyt.wimo.background.WimoExecutorHolder;
-import com.spongyt.wimo.networking.OrderService;
-import com.spongyt.wimo.networking.model.OrderRequestResponse;
+import com.spongyt.wimo.config.ApplicationConfig;
+import com.spongyt.wimo.networking.order.OrderRequestResponse;
+import com.spongyt.wimo.networking.order.OrderService;
 import com.spongyt.wimo.repository.DaoProvider;
 import com.spongyt.wimo.repository.Order;
 import com.spongyt.wimo.repository.OrderDao;
@@ -17,12 +17,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
 import de.greenrobot.event.EventBus;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 import timber.log.Timber;
 
 /**
@@ -34,7 +30,7 @@ public class OrderSyncService extends IntentService{
 
     private OrderDao orderDao;
     private OrderService orderService;
-    private ScheduledExecutorService mExecutorService = WimoExecutorHolder.getExecutor();
+    private ScheduledExecutorService mExecutorService = ApplicationConfig.executorService();
 
 
     public OrderSyncService() {
@@ -43,23 +39,10 @@ public class OrderSyncService extends IntentService{
 
     @Override
     public void onCreate() {
-        Timber.d("Start service");
         super.onCreate();
 
         orderDao = DaoProvider.getOrderDao();
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://pjtxcpwkwzlwirwf.myfritz.net:8081")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        orderService = retrofit.create(OrderService.class);
+        orderService = ApplicationConfig.retrofit().create(OrderService.class);
     }
 
     @Override

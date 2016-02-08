@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
@@ -42,6 +43,10 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+
+    //GCM (need old version because of gradle plugin)
+    compile "com.google.android.gms:play-services:8.3.0"
+
 
 
 
